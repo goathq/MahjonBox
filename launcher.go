@@ -84,3 +84,46 @@ func (l *Launcher) StopProcess(processType string) bool {
 	}
 	return false
 }
+
+// ============= 新增功能 =============
+
+// StartServices 同时启动多个服务（对应之前的3.2）
+func (l *Launcher) StartServices(enableSkin, enableHelper bool) error {
+	if enableSkin {
+		ch, cmd, err := runCommandWithOutput("python", "majsoul_max.py")
+		if err != nil {
+			return err
+		}
+		l.skinCmd = cmd
+		go l.forwardOutput(ch, "skin")
+	}
+
+	if enableHelper {
+		ch, cmd, err := runCommandWithOutput("./third_party/mahjong-helper")
+		if err != nil {
+			return err
+		}
+		l.helperCmd = cmd
+		go l.forwardOutput(ch, "helper")
+	}
+	return nil
+}
+
+// 私有方法：转发输出到前端事件
+func (l *Launcher) forwardOutput(ch <-chan string, serviceType string) {
+	for line := range ch {
+		runtime.EventsEmit(l.ctx, serviceType+"_output", line)
+	}
+}
+
+// SetSkin 设置皮肤（对应4.1）
+func (l *Launcher) SetSkin(skinName string) error {
+	// 实现你的皮肤配置逻辑
+	return nil
+}
+
+// GetHelperStats 获取助手状态（对应4.2）
+func (l *Launcher) GetHelperStats() (string, error) {
+	// 实现获取助手状态的逻辑
+	return "运行中", nil
+}

@@ -1,30 +1,17 @@
-<script setup>
-import HelloWorld from './components/HelloWorld.vue'
-</script>
-
 <template>
-  <div>
-    <a href="https://vite.dev" target="_blank">
-      <img src="/vite.svg" class="logo" alt="Vite logo" />
-    </a>
-    <a href="https://vuejs.org/" target="_blank">
-      <img src="./assets/vue.svg" class="logo vue" alt="Vue logo" />
-    </a>
+  <div class="control-panel">
+    <button @click="toggleService('skin')">换肤{{ skinEnabled ? '关闭' : '开启' }}</button>
+    <button @click="toggleService('helper')">牌效助手{{ helperEnabled ? '关闭' : '开启' }}</button>
   </div>
-  <HelloWorld msg="Vite + Vue" />
 </template>
 
-<style scoped>
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
+<script>
+export default {
+  methods: {
+    async toggleService(service) {
+      const result = await window.backend.ToggleService(service)
+      this[`${service}Enabled`] = !this[`${service}Enabled`]
+    }
+  }
 }
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.vue:hover {
-  filter: drop-shadow(0 0 2em #42b883aa);
-}
-</style>
+</script>
