@@ -1,0 +1,11 @@
+{
+    "name": "mahjonBox",
+    "outputfilename": "mahjonBox.exe",
+    "frontend:install": "npm install",
+    "frontend:build": "npm run build",
+    "frontend:dev": "",
+    "author": {
+      "name": "Your Name",
+      "email": "your@email.com"
+    }
+  }
